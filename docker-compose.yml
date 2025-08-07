@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   postgres:
@@ -22,6 +20,48 @@ services:
     networks:
       - witcher-net
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    # Adiciona um healthcheck para garantir que o Zookeeper esteja pronto
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc localhost 2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - witcher-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      zookeeper:
+        condition: service_healthy # AGORA ESPERA O ZOOKEEPER FICAR SAUDÁVEL
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    # Garante que o Kafka esteja pronto para aceitar conexões antes que outros serviços iniciem
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    networks:
+      - witcher-net
+
   eureka-server:
     build: ./service-discovery
     container_name: eureka-server
@@ -30,6 +70,12 @@ services:
       - "8761:8761"
     networks:
       - witcher-net
+    # Garante que o Eureka esteja pronto para registrar serviços
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
         
   bestiary-and-armory:
     build: ./bestiary-and-armory-service
@@ -47,9 +93,26 @@ services:
       postgres:
         condition: service_healthy # Espera o healthcheck do postgres passar
       eureka-server:
-        condition: service_started
+        condition: service_healthy # AGORA ESPERA O EUREKA FICAR SAUDÁVEL
     networks:
       - witcher-net
+
+  witcher-contracts:
+    build: ./witcher-contracts-service
+    container_name: witcher-contracts-app
+    ports:
+      - "8200:8200"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka # Onde encontrar o Eureka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092 # Conecta ao listener INTERNO do Kafka, que é a melhor prática
+    depends_on:
+      kafka:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - witcher-net
+
 
 volumes:
   postgres-data:

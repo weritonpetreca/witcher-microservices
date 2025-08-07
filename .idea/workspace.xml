@@ -4,44 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b788a8a5-5cac-44d6-8145-32629a4d3895" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/BestiaryAndArmoryServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/CreateItemRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/ItemController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/ItemDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/model/Item.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/model/ItemType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/repository/ItemRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/service/ItemService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/test/java/com/petreca/bestiaryandarmory/BestiaryAndArmoryServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/src/main/java/com/petreca/servicediscovery/ServiceDiscoveryApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service-discovery/src/test/java/com/petreca/servicediscovery/ServiceDiscoveryApplicationTests.java" afterDir="false" />
+    <list default="true" id="b788a8a5-5cac-44d6-8145-32629a4d3895" name="Changes" comment="feat(service): add item management functionality&#10;&#10;- Implemented Item entity with JPA annotations.&#10;- Created ItemType enum for item categorization.&#10;- Developed ItemService for CRUD operations on items.&#10;- Added ItemController for handling HTTP requests related to items.&#10;- Configured application properties for PostgreSQL database.&#10;- Set up Dockerfile and docker-compose for service deployment.">
+      <change afterPath="$PROJECT_DIR$/.idea/git_toolbox_prj.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/client/ItemClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/client/ItemDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/config/KafkaProducerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/controller/ContractController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/controller/ContractRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/service/ContractMessageDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/service/ContractProducerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service-discovery/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/service-discovery/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service-discovery/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/service-discovery/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +41,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;weritonpetreca&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/weritonpetreca/witcher-microservices.git&quot;,
+    &quot;accountId&quot;: &quot;286e1a52-6365-425f-aefb-f615655e27f3&quot;
+  }
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -66,26 +60,72 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="30vJ6njqVXm2UOQ6BDspeQfSqpE" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.BestiaryAndArmoryServiceApplication.executor": "Run",
+    "Application.WitcherContractsServiceApplication.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/eulcf/Documents/Programação/Java/dio-ntt-data/witcher-microservices",
-    "settings.editor.selected.configurable": "com.github.copilot.settings.customInstructions.CopilotInstructionsConfigurable"
+    "settings.editor.selected.configurable": "advanced.settings"
   }
 }]]></component>
+  <component name="RunManager" selected="Application.BestiaryAndArmoryServiceApplication">
+    <configuration name="BestiaryAndArmoryServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.petreca.bestiaryandarmory.BestiaryAndArmoryServiceApplication" />
+      <module name="bestiary-and-armory-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.petreca.bestiaryandarmory.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WitcherContractsServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.petreca.witchercontracts.WitcherContractsServiceApplication" />
+      <module name="witcher-contracts-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.petreca.witchercontracts.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.BestiaryAndArmoryServiceApplication" />
+        <item itemvalue="Application.WitcherContractsServiceApplication" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="b788a8a5-5cac-44d6-8145-32629a4d3895" name="Changes" comment="" />
@@ -94,6 +134,19 @@
       <option name="presentableId" value="Default" />
       <updated>1754501948298</updated>
     </task>
+    <task id="LOCAL-00001" summary="feat(service): add item management functionality&#10;&#10;- Implemented Item entity with JPA annotations.&#10;- Created ItemType enum for item categorization.&#10;- Developed ItemService for CRUD operations on items.&#10;- Added ItemController for handling HTTP requests related to items.&#10;- Configured application properties for PostgreSQL database.&#10;- Set up Dockerfile and docker-compose for service deployment.">
+      <option name="closed" value="true" />
+      <created>1754575611961</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1754575611961</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat(service): add item management functionality&#10;&#10;- Implemented Item entity with JPA annotations.&#10;- Created ItemType enum for item categorization.&#10;- Developed ItemService for CRUD operations on items.&#10;- Added ItemController for handling HTTP requests related to items.&#10;- Configured application properties for PostgreSQL database.&#10;- Set up Dockerfile and docker-compose for service deployment." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(service): add item management functionality&#10;&#10;- Implemented Item entity with JPA annotations.&#10;- Created ItemType enum for item categorization.&#10;- Developed ItemService for CRUD operations on items.&#10;- Added ItemController for handling HTTP requests related to items.&#10;- Configured application properties for PostgreSQL database.&#10;- Set up Dockerfile and docker-compose for service deployment." />
   </component>
 </project>
