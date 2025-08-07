@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:13
+    container_name: witcher-postgres
+    environment:
+      POSTGRES_DB: witcher_db # O banco de dados a ser criado
+      POSTGRES_USER: ${POSTGRES_USER} # Pega o valor do arquivo .env
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Pega o valor do arquivo .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    # Garante que o serviço só seja considerado "saudável" quando o banco estiver pronto
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d witcher_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - witcher-net
+
+  eureka-server:
+    build: ./service-discovery
+    container_name: eureka-server
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+    networks:
+      - witcher-net
+        
+  bestiary-and-armory:
+    build: ./bestiary-and-armory-service
+    container_name: bestiary-and-armory-app
+    restart: unless-stopped
+    ports:
+      - "8100:8100"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/witcher_db
+      # Adiciona as credenciais que estavam faltando
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy # Espera o healthcheck do postgres passar
+      eureka-server:
+        condition: service_started
+    networks:
+      - witcher-net
+
+volumes:
+  postgres-data:
+
+# Define a rede compartilhada
+networks:
+  witcher-net:
+    driver: bridge
