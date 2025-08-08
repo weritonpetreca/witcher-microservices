@@ -4,22 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b788a8a5-5cac-44d6-8145-32629a4d3895" name="Changes" comment="feat(service): implement witcher contracts functionality&#10;&#10;* Add ContractController for handling contract creation&#10;* Create ContractRequestDTO and ContractMessageDTO for data transfer&#10;* Implement ItemClient to interact with item service&#10;* Configure Kafka producer for sending contract messages&#10;* Update application properties for new service settings&#10;* Add Docker configuration for witcher contracts service">
-      <change afterPath="$PROJECT_DIR$/api-gateway/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/mappers/ItemMapper.java" afterDir="false" />
+    <list default="true" id="b788a8a5-5cac-44d6-8145-32629a4d3895" name="Changes" comment="feat(api-gateway): add API Gateway for microservices&#10;&#10;* Implemented ApiGatewayApplication for service routing&#10;* Configured Spring Cloud Gateway with Eureka for service discovery&#10;* Added health check endpoints for monitoring&#10;* Set up Docker configuration for deployment&#10;* Updated pom.xml with necessary dependencies">
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/petreca/apigateway/filter/AuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/petreca/apigateway/util/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/petreca/apigateway/util/RouterValidator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/config/DataInitializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/dto/AuthRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/dto/AuthResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/dto/RegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/model/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/model/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/repository/RoleRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/security/AuthUserDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/security/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/security/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/service/AuthUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/ItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service-discovery/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/service-discovery/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,9 +98,17 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/eulcf/Documents/Programação/Java/dio-ntt-data/witcher-microservices&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.android.studio.ml.templates&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\eulcf\Documents\Programação\Java\dio-ntt-data\witcher-microservices\auth-service" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.petreca.apigateway.filter" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.BestiaryAndArmoryServiceApplication">
     <configuration name="BestiaryAndArmoryServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.petreca.bestiaryandarmory.BestiaryAndArmoryServiceApplication" />
@@ -146,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754602396169</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat(api-gateway): add API Gateway for microservices&#10;&#10;* Implemented ApiGatewayApplication for service routing&#10;* Configured Spring Cloud Gateway with Eureka for service discovery&#10;* Added health check endpoints for monitoring&#10;* Set up Docker configuration for deployment&#10;* Updated pom.xml with necessary dependencies">
+      <option name="closed" value="true" />
+      <created>1754625641540</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1754625641540</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,6 +192,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat(service): add item management functionality&#10;&#10;- Implemented Item entity with JPA annotations.&#10;- Created ItemType enum for item categorization.&#10;- Developed ItemService for CRUD operations on items.&#10;- Added ItemController for handling HTTP requests related to items.&#10;- Configured application properties for PostgreSQL database.&#10;- Set up Dockerfile and docker-compose for service deployment." />
     <MESSAGE value="feat(service): implement witcher contracts functionality&#10;&#10;* Add ContractController for handling contract creation&#10;* Create ContractRequestDTO and ContractMessageDTO for data transfer&#10;* Implement ItemClient to interact with item service&#10;* Configure Kafka producer for sending contract messages&#10;* Update application properties for new service settings&#10;* Add Docker configuration for witcher contracts service" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(service): implement witcher contracts functionality&#10;&#10;* Add ContractController for handling contract creation&#10;* Create ContractRequestDTO and ContractMessageDTO for data transfer&#10;* Implement ItemClient to interact with item service&#10;* Configure Kafka producer for sending contract messages&#10;* Update application properties for new service settings&#10;* Add Docker configuration for witcher contracts service" />
+    <MESSAGE value="feat(api-gateway): add API Gateway for microservices&#10;&#10;* Implemented ApiGatewayApplication for service routing&#10;* Configured Spring Cloud Gateway with Eureka for service discovery&#10;* Added health check endpoints for monitoring&#10;* Set up Docker configuration for deployment&#10;* Updated pom.xml with necessary dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(api-gateway): add API Gateway for microservices&#10;&#10;* Implemented ApiGatewayApplication for service routing&#10;* Configured Spring Cloud Gateway with Eureka for service discovery&#10;* Added health check endpoints for monitoring&#10;* Set up Docker configuration for deployment&#10;* Updated pom.xml with necessary dependencies" />
   </component>
 </project>

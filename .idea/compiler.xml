@@ -9,7 +9,7 @@
         <module name="api-gateway" />
         <module name="service-discovery" />
       </profile>
-      <profile name="Annotation profile for bestiary-and-armory-service" enabled="true">
+      <profile name="Annotation profile for witcher-contracts-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -17,16 +17,20 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
         </processorPath>
         <module name="witcher-contracts-service" />
+        <module name="auth-service" />
         <module name="bestiary-and-armory-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="auth-service (1)" target="1.8" />
       <module name="witcher-microservices" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="auth-service (1)" options="-parameters" />
       <module name="bestiary-and-armory-service" options="-parameters" />
       <module name="service-discovery" options="-parameters" />
       <module name="witcher-contracts-service" options="-parameters" />

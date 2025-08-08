@@ -12,18 +12,28 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
+        - id: auth-service-route
+          uri: lb://auth-service-app
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - AuthenticationFilter
+
         - id: bestiary-and-armory-route
           uri: lb://bestiary-and-armory-app
           predicates:
             - Path=/api/items/** # Este predicado único cobre todos os casos (/api/items, /api/items/1, etc.)
           filters:
-            - StripPrefix=1
+            - AuthenticationFilter
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
         - id: witcher-contracts-route
           uri: lb://witcher-contracts-app
           predicates:
             - Path=/api/contracts/** # Simplificação para consistência e robustez
           filters:
-            - StripPrefix=1
+            - AuthenticationFilter
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
 
 logging:
   level:
@@ -35,7 +45,7 @@ logging:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-server:8761/eureka
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
     registry-fetch-interval-seconds: 5
   instance:
     prefer-ip-address: true
@@ -48,3 +58,5 @@ management:
   endpoint:
     health:
       show-details: always
+jwt:
+  secret: ${JWT_SECRET}

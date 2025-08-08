@@ -3,15 +3,16 @@ services:
   postgres:
     image: postgres:13
     container_name: witcher-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: witcher_db # O banco de dados a ser criado
-      POSTGRES_USER: ${POSTGRES_USER} # Pega o valor do arquivo .env
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Pega o valor do arquivo .env
+      POSTGRES_DB: witcher_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    # Garante que o serviço só seja considerado "saudável" quando o banco estiver pronto
+    # Ensures the service is only considered "healthy" when the database is ready
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d witcher_db"]
       interval: 10s
@@ -23,12 +24,13 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper
+    restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
-    # Adiciona um healthcheck para garantir que o Zookeeper esteja pronto
+    # Healthcheck to ensure Zookeeper is ready before dependents start
     healthcheck:
       test: ["CMD-SHELL", "echo ruok | nc localhost 2181"]
       interval: 10s
@@ -40,11 +42,12 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.0.1
     container_name: kafka
+    restart: unless-stopped
     ports:
       - "9092:9092"
     depends_on:
       zookeeper:
-        condition: service_healthy # AGORA ESPERA O ZOOKEEPER FICAR SAUDÁVEL
+        condition: service_healthy
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -53,7 +56,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-    # Garante que o Kafka esteja pronto para aceitar conexões antes que outros serviços iniciem
+    # Healthcheck to ensure Kafka is ready to accept connections
     healthcheck:
       test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
       interval: 15s
@@ -70,7 +73,7 @@ services:
       - "8761:8761"
     networks:
       - witcher-net
-    # Garante que o Eureka esteja pronto para registrar serviços
+    # Healthcheck to ensure Eureka is ready to register services
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
       interval: 10s
@@ -86,16 +89,15 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/witcher_db
-      # Adiciona as credenciais que estavam faltando
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       postgres:
-        condition: service_healthy # Espera o healthcheck do postgres passar
+        condition: service_healthy
       eureka-server:
-        condition: service_healthy # AGORA ESPERA O EUREKA FICAR SAUDÁVEL
+        condition: service_healthy
     healthcheck:
-      # Garante que o serviço esteja totalmente funcional antes que outros dependam dele
+      # Ensures the service is fully functional before dependents start
       test: ["CMD", "curl", "-f", "http://localhost:8100/actuator/health"]
       interval: 15s
       timeout: 5s
@@ -106,19 +108,46 @@ services:
   witcher-contracts:
     build: ./witcher-contracts-service
     container_name: witcher-contracts-app
+    restart: unless-stopped
     ports:
       - "8200:8200"
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka # Onde encontrar o Eureka
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092 # Conecta ao listener INTERNO do Kafka, que é a melhor prática
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092 # Connect to the internal Kafka listener
     depends_on:
       kafka:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
     healthcheck:
-      # Garante que o serviço esteja totalmente funcional antes que outros dependam dele
+      # Ensures the service is fully functional before dependents start
       test: ["CMD", "curl", "-f", "http://localhost:8200/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks:
+      - witcher-net
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service-app
+    restart: unless-stopped
+    ports:
+      - "8766:8766"
+    environment:
+      SPRING_APPLICATION_NAME: auth-service-app
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/witcher_db
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8766/actuator/health"]
       interval: 15s
       timeout: 5s
       retries: 10
@@ -128,15 +157,15 @@ services:
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway-app
+    restart: unless-stopped
     ports:
       - "8765:8765"
     environment:
+      SPRING_APPLICATION_NAME: api-gateway-app
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      # Agora o Gateway espera que os serviços estejam não apenas iniciados, mas SAUDÁVEIS
-      bestiary-and-armory:
-        condition: service_healthy
-      witcher-contracts:
+      eureka-server:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
