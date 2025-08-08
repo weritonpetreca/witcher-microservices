@@ -94,6 +94,12 @@ services:
         condition: service_healthy # Espera o healthcheck do postgres passar
       eureka-server:
         condition: service_healthy # AGORA ESPERA O EUREKA FICAR SAUDÁVEL
+    healthcheck:
+      # Garante que o serviço esteja totalmente funcional antes que outros dependam dele
+      test: ["CMD", "curl", "-f", "http://localhost:8100/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
     networks:
       - witcher-net
 
@@ -110,6 +116,33 @@ services:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    healthcheck:
+      # Garante que o serviço esteja totalmente funcional antes que outros dependam dele
+      test: ["CMD", "curl", "-f", "http://localhost:8200/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks:
+      - witcher-net
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway-app
+    ports:
+      - "8765:8765"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    depends_on:
+      # Agora o Gateway espera que os serviços estejam não apenas iniciados, mas SAUDÁVEIS
+      bestiary-and-armory:
+        condition: service_healthy
+      witcher-contracts:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
     networks:
       - witcher-net
 

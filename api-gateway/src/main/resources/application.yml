@@ -1,0 +1,50 @@
+server:
+  port: 8765
+
+spring:
+  application:
+    name: api-gateway-app
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: bestiary-and-armory-route
+          uri: lb://bestiary-and-armory-app
+          predicates:
+            - Path=/api/items/** # Este predicado único cobre todos os casos (/api/items, /api/items/1, etc.)
+          filters:
+            - StripPrefix=1
+        - id: witcher-contracts-route
+          uri: lb://witcher-contracts-app
+          predicates:
+            - Path=/api/contracts/** # Simplificação para consistência e robustez
+          filters:
+            - StripPrefix=1
+
+logging:
+  level:
+    # Aumentando o nível de log para TRACE para obter o máximo de detalhes sobre o roteamento
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: TRACE
+    reactor.netty: DEBUG
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    health:
+      show-details: always
