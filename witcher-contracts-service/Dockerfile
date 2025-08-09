@@ -1,15 +1,24 @@
-FROM maven:3.9-eclipse-temurin-17 AS build
-WORKDIR /app
-ENV LANG C.UTF-8
-ENV LANGUAGE C.UTF-8
-ENV LC_ALL C.UTF-8
-COPY pom.xml .
-RUN mvn dependency:go-offline
-COPY src ./src
-RUN mvn package -DskipTests
+# Use Docker BuildKit syntax for cache mounts
+# syntax=docker/dockerfile:1
 
-FROM openjdk:17-jdk-slim
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# --- Build Stage ---
+# Use a full JDK image to build the application
+FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
+COPY pom.xml .
+
+# Use a cache mount to persist the .m2 directory across builds.
+# This makes builds much faster and resilient to network issues.
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+
+COPY src ./src
+RUN --mount=type=cache,target=/root/.m2 mvn package -DskipTests
+
+# --- Final Stage ---
+# Use a slim JRE image for a smaller final image size
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+# Install curl for the healthcheck and clean up the apt cache
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

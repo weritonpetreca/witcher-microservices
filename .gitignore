@@ -1,0 +1,28 @@
+# Local environment variables
+.env
+
+# IDE configuration files
+.idea/
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated
+.springBeans
+.sts4-cache
+.vscode/
+
+# Build output
+target/
+build/
+
+# Log files
+*.log
+
+# Maven Wrapper Jar
+.mvn/wrapper/maven-wrapper.jar
+
+# Other
+HELP.md

@@ -1,5 +1,6 @@
 package com.petreca.bestiaryandarmory.service;
 
+import com.petreca.bestiaryandarmory.mappers.ItemMapper;
 import com.petreca.bestiaryandarmory.controller.CreateItemRequestDTO;
 import com.petreca.bestiaryandarmory.model.Item;
 import com.petreca.bestiaryandarmory.repository.ItemRepository;
@@ -14,13 +15,10 @@ import java.util.Optional;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemMapper itemMapper;
 
     public Item createItem(CreateItemRequestDTO requestDTO) {
-        Item newItem = new Item();
-        newItem.setName(requestDTO.name());
-        newItem.setDescription(requestDTO.description());
-        newItem.setItemType(requestDTO.itemType());
-        newItem.setPrice(requestDTO.price());
+        Item newItem = itemMapper.toEntity(requestDTO);
         return itemRepository.save(newItem);
     }
 

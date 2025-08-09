@@ -61,7 +61,9 @@ services:
       test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
       interval: 15s
       timeout: 10s
-      retries: 10
+      retries: 5
+      # Gives Kafka 40 seconds to start up before the health check is enforced
+      start_period: 60s
     networks:
       - witcher-net
 
@@ -71,22 +73,28 @@ services:
     restart: unless-stopped
     ports:
       - "8761:8761"
+    environment:
+      # Prevents the server from trying to register with itself in a standalone setup
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
     networks:
       - witcher-net
     # Healthcheck to ensure Eureka is ready to register services
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:8761/actuator/health"]
       interval: 10s
-      timeout: 5s
-      retries: 10
+      timeout: 3s
+      start_period: 30s # Give Eureka time to start before checking health
+      retries: 5
         
-  bestiary-and-armory:
+  bestiary-and-armory-app:
     build: ./bestiary-and-armory-service
     container_name: bestiary-and-armory-app
     restart: unless-stopped
     ports:
       - "8100:8100"
     environment:
+      SPRING_APPLICATION_NAME: bestiary-and-armory-app
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/witcher_db
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
@@ -98,20 +106,22 @@ services:
         condition: service_healthy
     healthcheck:
       # Ensures the service is fully functional before dependents start
-      test: ["CMD", "curl", "-f", "http://localhost:8100/actuator/health"]
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:8100/actuator/health"]
       interval: 15s
-      timeout: 5s
-      retries: 10
+      timeout: 3s
+      start_period: 30s # Give the service time to start before checking health
+      retries: 5
     networks:
       - witcher-net
 
-  witcher-contracts:
+  witcher-contracts-app:
     build: ./witcher-contracts-service
     container_name: witcher-contracts-app
     restart: unless-stopped
     ports:
       - "8200:8200"
     environment:
+      SPRING_APPLICATION_NAME: witcher-contracts-app
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092 # Connect to the internal Kafka listener
     depends_on:
@@ -121,14 +131,15 @@ services:
         condition: service_healthy
     healthcheck:
       # Ensures the service is fully functional before dependents start
-      test: ["CMD", "curl", "-f", "http://localhost:8200/actuator/health"]
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:8200/actuator/health"]
       interval: 15s
-      timeout: 5s
-      retries: 10
+      timeout: 3s
+      start_period: 30s # Give the service time to start before checking health
+      retries: 5
     networks:
       - witcher-net
 
-  auth-service:
+  auth-service-app:
     build: ./auth-service
     container_name: auth-service-app
     restart: unless-stopped
@@ -147,14 +158,15 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8766/actuator/health"]
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:8766/actuator/health"]
       interval: 15s
-      timeout: 5s
-      retries: 10
+      timeout: 3s
+      start_period: 30s # Give the service time to start before checking health
+      retries: 5
     networks:
       - witcher-net
 
-  api-gateway:
+  api-gateway-app:
     build: ./api-gateway
     container_name: api-gateway-app
     restart: unless-stopped
@@ -168,10 +180,11 @@ services:
       eureka-server:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "-s", "http://localhost:8765/actuator/health" ]
       interval: 15s
-      timeout: 5s
-      retries: 10
+      timeout: 3s
+      start_period: 30s # Give the gateway time to start before checking health
+      retries: 5
     networks:
       - witcher-net
 
@@ -179,7 +192,7 @@ services:
 volumes:
   postgres-data:
 
-# Define a rede compartilhada
+# Define the shared network
 networks:
   witcher-net:
     driver: bridge

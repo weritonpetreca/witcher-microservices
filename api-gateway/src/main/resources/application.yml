@@ -1,12 +1,24 @@
 server:
   port: 8765
+  forward-headers-strategy: framework # Crucial: Tells the gateway to use X-Forwarded-* headers
 
 spring:
   application:
     name: api-gateway-app
-
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]': # Apply to all paths
+            allowedOrigins: "http://localhost:8765" # The origin of the Swagger UI
+            allowedMethods:
+              - "GET"
+              - "POST"
+              - "PUT"
+              - "DELETE"
+              - "OPTIONS"
+            allowedHeaders: "*" # Allow all headers for simplicity in dev
+            allow-credentials: true
       discovery:
         locator:
           enabled: true
@@ -22,25 +34,47 @@ spring:
         - id: bestiary-and-armory-route
           uri: lb://bestiary-and-armory-app
           predicates:
-            - Path=/api/items/** # Este predicado único cobre todos os casos (/api/items, /api/items/1, etc.)
+            - Path=/api/items/**, /api/monsters/**
           filters:
             - AuthenticationFilter
-            - RewritePath=/api/(?<segment>.*), /$\{segment}
 
         - id: witcher-contracts-route
           uri: lb://witcher-contracts-app
           predicates:
-            - Path=/api/contracts/** # Simplificação para consistência e robustez
+            - Path=/api/contracts/**
           filters:
             - AuthenticationFilter
-            - RewritePath=/api/(?<segment>.*), /$\{segment}
 
-logging:
-  level:
-    # Aumentando o nível de log para TRACE para obter o máximo de detalhes sobre o roteamento
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.http.server.reactive: TRACE
-    reactor.netty: DEBUG
+        - id: openapi-auth-route
+          uri: lb://auth-service-app
+          predicates:
+            - Path=/v3/api-docs/auth-service-app
+          filters:
+            - RewritePath=/v3/api-docs/auth-service-app, /api/v3/api-docs
+
+        - id: openapi-bestiary-route
+          uri: lb://bestiary-and-armory-app
+          predicates:
+            - Path=/v3/api-docs/bestiary-and-armory-app
+          filters:
+            - RewritePath=/v3/api-docs/bestiary-and-armory-app, /api/v3/api-docs
+
+        - id: openapi-contracts-route
+          uri: lb://witcher-contracts-app
+          predicates:
+            - Path=/v3/api-docs/witcher-contracts-app
+          filters:
+            - RewritePath=/v3/api-docs/witcher-contracts-app, /api/v3/api-docs
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Auth Service
+        url: /v3/api-docs/auth-service-app
+      - name: Bestiary and Armory Service
+        url: /v3/api-docs/bestiary-and-armory-app
+      - name: Witcher Contracts Service
+        url: /v3/api-docs/witcher-contracts-app
 
 eureka:
   client:
