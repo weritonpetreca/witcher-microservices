@@ -1,65 +1,65 @@
 package com.petreca.bestiaryandarmory.controller;
 
-
-import com.petreca.bestiaryandarmory.model.Item;
-import com.petreca.bestiaryandarmory.mappers.ItemMapper;
-import com.petreca.bestiaryandarmory.service.ItemService;
+import com.petreca.bestiaryandarmory.item.dto.CreateItemRequestDTO;
+import com.petreca.bestiaryandarmory.item.dto.DeleteItemResponseDTO;
+import com.petreca.bestiaryandarmory.item.dto.ItemDTO;
+import com.petreca.bestiaryandarmory.item.dto.UpdateItemRequestDTO;
+import com.petreca.bestiaryandarmory.item.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/items")
-@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
+@Tag(name = "Item Management", description = "Operations for managing items in the bestiary")
 public class ItemController {
 
     private final ItemService itemService;
-    private final ItemMapper itemMapper;
 
-    @Operation(summary = "Create a new item", description = "Adds a new item to the bestiary and armory.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Item created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data for item creation")
-    })
-    @PostMapping
-    public ResponseEntity<ItemDTO> createItem(@Valid @RequestBody CreateItemRequestDTO requestDTO) {
-        Item createdItem = itemService.createItem(requestDTO);
-        ItemDTO createdItemDTO = itemMapper.toDTO(createdItem);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(createdItem.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(createdItemDTO);
-    }
-
-    @Operation(summary = "Get all items", description = "Returns a list of all available items.")
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved list of items")
     @GetMapping
+    @Operation(summary = "Get all items", description = "Retrieve all items from the bestiary")
     public ResponseEntity<List<ItemDTO>> getAllItems() {
-        List<ItemDTO> itemsDTO = itemService.getAllItems().stream()
-                .map(itemMapper::toDTO).toList();
-        return ResponseEntity.ok(itemsDTO);
+        List<ItemDTO> items = itemService.getAllItems();
+        return ResponseEntity.ok(items);
     }
 
-    @Operation(summary = "Get an item by ID", description = "Returns a single item based on its unique ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved item"),
-            @ApiResponse(responseCode = "404", description = "Item not found with the given ID")
-    })
     @GetMapping("/{id}")
+    @Operation(summary = "Get item by ID", description = "Retrieve a specific item by its ID")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
         return itemService.getItemById(id)
-                .map(itemMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    @Operation(summary = "Create new item", description = "Add a new item to the bestiary")
+    public ResponseEntity<ItemDTO> createItem(@Valid @RequestBody CreateItemRequestDTO requestDTO) {
+        ItemDTO createdItem = itemService.createItem(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdItem);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update item", description = "Update an existing item in the bestiary")
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @Valid @RequestBody UpdateItemRequestDTO requestDTO) {
+        return itemService.updateItem(id, requestDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete item", description = "Remove an item from the bestiary")
+    public ResponseEntity<DeleteItemResponseDTO> deleteItem(@PathVariable Long id) {
+        if (itemService.deleteItem(id)) {
+            DeleteItemResponseDTO response = new DeleteItemResponseDTO("Item deleted successfully", id);
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

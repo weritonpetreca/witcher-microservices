@@ -4,61 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b788a8a5-5cac-44d6-8145-32629a4d3895" name="Changes" comment="feat(auth): add authentication service and OpenAPI support&#10;&#10;* Implement authentication service with JWT&#10;* Add OpenAPI configuration for API documentation&#10;* Include validation for item creation requests&#10;* Update Dockerfile for improved build performance&#10;* Add CORS configuration for Swagger UI access&#10;* Create example .env file for local development">
-      <change afterPath="$PROJECT_DIR$/Dockerfile.jvm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/test/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/test/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/test/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="b788a8a5-5cac-44d6-8145-32629a4d3895" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/MonsterController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/dto/CreateItemRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/dto/DeleteItemResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/dto/ItemDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/dto/UpdateItemRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/mapper/ItemMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/service/ItemService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/dto/CreateMonsterRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/dto/DeleteMonsterResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/dto/MonsterDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/dto/UpdateMonsterRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/mapper/MonsterMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/model/Monster.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/model/MonsterType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/repository/MonsterRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/monster/service/MonsterService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/load-data.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/witcher-data.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/petreca/apigateway/config/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/petreca/apigateway/filter/AuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/petreca/apigateway/util/JwtUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/petreca/apigateway/util/RouterValidator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/AuthServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/AuthServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/petreca/authservice/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/BestiaryAndArmoryServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/BestiaryAndArmoryServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/config/OpenApiConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/CreateItemRequestDTO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/ItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/service/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/service/ItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/ItemDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/TokenValidationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/controller/TokenValidationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/mappers/ItemMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/model/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/model/ItemType.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/model/ItemType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/repository/ItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/item/repository/ItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/java/com/petreca/bestiaryandarmory/service/ItemService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bestiary-and-armory-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service-discovery/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service-discovery/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service-discovery/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service-discovery/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service-discovery/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/service-discovery/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/WitcherContractsServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/WitcherContractsServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/client/ItemClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/client/ItemClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/config/OpenApiConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-library/src/main/java/com/petreca/common/config/OpenApiConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/controller/ContractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/java/com/petreca/witchercontracts/controller/ContractController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witcher-contracts-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/witcher-contracts-service/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +57,31 @@
     &quot;assignee&quot;: &quot;weritonpetreca&quot;
   }
 }</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="addMonster" />
+                    <option name="lastUsedInstant" value="1755173635" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1755173634" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/weritonpetreca/witcher-microservices.git&quot;,
@@ -121,7 +121,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;addMonster&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/eulcf/Documents/Programação/Java/dio-ntt-data/witcher-microservices&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
@@ -220,7 +220,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754713416220</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat(auth): add authentication service and OpenAPI support&#10;&#10;* Implement authentication service with JWT&#10;* Add OpenAPI configuration for API documentation&#10;* Include validation for item creation requests&#10;* Update Dockerfile for improved build performance&#10;* Add CORS configuration for Swagger UI access&#10;* Create example .env file for local development">
+      <option name="closed" value="true" />
+      <created>1755173463370</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1755173463370</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

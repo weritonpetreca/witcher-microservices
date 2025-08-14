@@ -1,4 +1,4 @@
-package com.petreca.bestiaryandarmory.model;
+package com.petreca.bestiaryandarmory.item.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
