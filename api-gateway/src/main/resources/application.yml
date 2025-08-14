@@ -1,86 +1,38 @@
 server:
   port: 8765
-  forward-headers-strategy: framework # Crucial: Tells the gateway to use X-Forwarded-* headers
 
 spring:
   application:
-    name: api-gateway-app
+    name: api-gateway
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]': # Apply to all paths
-            allowedOrigins: "http://localhost:8765" # The origin of the Swagger UI
-            allowedMethods:
-              - "GET"
-              - "POST"
-              - "PUT"
-              - "DELETE"
-              - "OPTIONS"
-            allowedHeaders: "*" # Allow all headers for simplicity in dev
-            allow-credentials: true
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
-      routes:
-        - id: auth-service-route
-          uri: lb://auth-service-app
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - AuthenticationFilter
-
-        - id: bestiary-and-armory-route
-          uri: lb://bestiary-and-armory-app
-          predicates:
-            - Path=/api/items/**, /api/monsters/**
-          filters:
-            - AuthenticationFilter
-
-        - id: witcher-contracts-route
-          uri: lb://witcher-contracts-app
-          predicates:
-            - Path=/api/contracts/**
-          filters:
-            - AuthenticationFilter
-
-        - id: openapi-auth-route
-          uri: lb://auth-service-app
-          predicates:
-            - Path=/v3/api-docs/auth-service-app
-          filters:
-            - RewritePath=/v3/api-docs/auth-service-app, /api/v3/api-docs
-
-        - id: openapi-bestiary-route
-          uri: lb://bestiary-and-armory-app
-          predicates:
-            - Path=/v3/api-docs/bestiary-and-armory-app
-          filters:
-            - RewritePath=/v3/api-docs/bestiary-and-armory-app, /api/v3/api-docs
-
-        - id: openapi-contracts-route
-          uri: lb://witcher-contracts-app
-          predicates:
-            - Path=/v3/api-docs/witcher-contracts-app
-          filters:
-            - RewritePath=/v3/api-docs/witcher-contracts-app, /api/v3/api-docs
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
 
 springdoc:
   swagger-ui:
     urls:
       - name: Auth Service
-        url: /v3/api-docs/auth-service-app
-      - name: Bestiary and Armory Service
-        url: /v3/api-docs/bestiary-and-armory-app
-      - name: Witcher Contracts Service
-        url: /v3/api-docs/witcher-contracts-app
+        url: http://localhost:8766/api/v3/api-docs
+      - name: Bestiary Service  
+        url: http://localhost:8100/api/v3/api-docs
+      - name: Contracts Service
+        url: http://localhost:8200/api/v3/api-docs
 
 eureka:
   client:
-    serviceUrl:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
-    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     prefer-ip-address: true
 
@@ -92,5 +44,6 @@ management:
   endpoint:
     health:
       show-details: always
+
 jwt:
   secret: ${JWT_SECRET}

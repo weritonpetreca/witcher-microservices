@@ -29,4 +29,8 @@ public class ItemService {
     public Optional<Item> getItemById(Long Id) {
         return itemRepository.findById(Id);
     }
+
+    public void deleteItem(Long id) {
+        itemRepository.deleteById(id);
+    }
 }

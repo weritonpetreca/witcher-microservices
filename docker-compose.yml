@@ -1,3 +1,19 @@
+# Define reusable environment blocks using YAML anchors
+x-common-env: &common-env
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+
+x-postgres-env: &postgres-env
+  # Inherit from the common environment
+  <<: *common-env
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/witcher_db
+  SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+  SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+
+x-jwt-env: &jwt-env
+  # Provide a default, non-production secret to ensure the app starts.
+  # This will be used if JWT_SECRET is not set in a .env file.
+  JWT_SECRET: ${JWT_SECRET:-your-default-super-secret-key-for-development-use-a-real-one-in-prod}
+
 services:
 
   postgres:
@@ -68,7 +84,11 @@ services:
       - witcher-net
 
   eureka-server:
-    build: ./service-discovery
+    build:
+      context: .
+      dockerfile: Dockerfile.jvm
+      args:
+        SERVICE_NAME: service-discovery
     container_name: eureka-server
     restart: unless-stopped
     ports:
@@ -81,24 +101,26 @@ services:
       - witcher-net
     # Healthcheck to ensure Eureka is ready to register services
     healthcheck:
-      test: ["CMD", "curl", "-f", "-s", "http://localhost:8761/actuator/health"]
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:8761/"]
       interval: 10s
       timeout: 3s
-      start_period: 30s # Give Eureka time to start before checking health
-      retries: 5
+      start_period: 60s # Give Eureka time to start before checking health
+      retries: 10
         
   bestiary-and-armory-app:
-    build: ./bestiary-and-armory-service
+    build:
+      context: .
+      dockerfile: Dockerfile.jvm
+      args:
+        SERVICE_NAME: bestiary-and-armory-service
     container_name: bestiary-and-armory-app
     restart: unless-stopped
     ports:
       - "8100:8100"
     environment:
       SPRING_APPLICATION_NAME: bestiary-and-armory-app
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/witcher_db
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      # Use the postgres environment alias
+      <<: [*postgres-env, *jwt-env]
     depends_on:
       postgres:
         condition: service_healthy
@@ -115,15 +137,20 @@ services:
       - witcher-net
 
   witcher-contracts-app:
-    build: ./witcher-contracts-service
+    build:
+      context: .
+      dockerfile: Dockerfile.jvm
+      args:
+        SERVICE_NAME: witcher-contracts-service
     container_name: witcher-contracts-app
     restart: unless-stopped
     ports:
       - "8200:8200"
     environment:
       SPRING_APPLICATION_NAME: witcher-contracts-app
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092 # Connect to the internal Kafka listener
+      # Use the common environment alias
+      <<: [*common-env, *jwt-env]
     depends_on:
       kafka:
         condition: service_healthy
@@ -140,18 +167,20 @@ services:
       - witcher-net
 
   auth-service-app:
-    build: ./auth-service
+    build:
+      context: .
+      dockerfile: Dockerfile.jvm
+      args:
+        SERVICE_NAME: auth-service
     container_name: auth-service-app
     restart: unless-stopped
     ports:
       - "8766:8766"
     environment:
-      SPRING_APPLICATION_NAME: auth-service-app
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/witcher_db
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      SPRING_APPLICATION_NAME: auth-service
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-3600000} # Correct syntax for default value
+      # Use the postgres environment alias
+      <<: [*postgres-env, *jwt-env] # Merge both aliases
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -167,15 +196,19 @@ services:
       - witcher-net
 
   api-gateway-app:
-    build: ./api-gateway
+    build:
+      context: .
+      dockerfile: Dockerfile.jvm
+      args:
+        SERVICE_NAME: api-gateway
     container_name: api-gateway-app
     restart: unless-stopped
     ports:
       - "8765:8765"
     environment:
-      SPRING_APPLICATION_NAME: api-gateway-app
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-      JWT_SECRET: ${JWT_SECRET}
+      SPRING_APPLICATION_NAME: api-gateway
+      # Use the common environment alias
+      <<: [*common-env, *jwt-env] # Merge both aliases
     depends_on:
       eureka-server:
         condition: service_healthy

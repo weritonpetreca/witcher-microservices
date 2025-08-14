@@ -7,16 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
+        <module name="common-library" />
         <module name="service-discovery" />
-      </profile>
-      <profile name="Annotation profile for auth-service" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
-        </processorPath>
-        <module name="auth-service" />
       </profile>
       <profile name="Annotation profile for bestiary-and-armory-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -27,8 +19,17 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
         </processorPath>
-        <module name="witcher-contracts-service" />
         <module name="bestiary-and-armory-service" />
+      </profile>
+      <profile name="Annotation profile for witcher-microservices-parent" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
+        </processorPath>
+        <module name="witcher-contracts-service" />
+        <module name="auth-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -42,6 +43,7 @@
       <module name="auth-service" options="-parameters" />
       <module name="auth-service (1)" options="-parameters" />
       <module name="bestiary-and-armory-service" options="-parameters" />
+      <module name="common-library" options="-parameters" />
       <module name="service-discovery" options="-parameters" />
       <module name="witcher-contracts-service" options="-parameters" />
     </option>

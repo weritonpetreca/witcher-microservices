@@ -1,0 +1,4 @@
+# Provide a dummy secret for the test environment so the context can load.
+# This value is only used during the 'mvn test' phase.
+jwt:
+  secret: a-dummy-secret-for-testing-purpose-that-is-long-enough

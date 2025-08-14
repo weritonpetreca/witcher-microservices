@@ -1,0 +1,33 @@
+# Universal Dockerfile for all Java services
+# This file uses multi-stage builds to create a lean final image.
+
+# --- Stage 1: Builder ---
+# This stage uses a full Maven and JDK image to build the application JAR.
+FROM maven:3.9-eclipse-temurin-17 AS builder
+
+# Argument to specify which service to build (e.g., "auth-service")
+ARG SERVICE_NAME
+
+WORKDIR /build
+
+# Copy the entire project context into the builder stage
+# This ensures Maven can find the parent POM and all module dependencies.
+COPY . .
+
+# Build the specific service and its dependencies (-am)
+# This command leverages the Docker cache mount for faster subsequent builds.
+RUN --mount=type=cache,target=/root/.m2 mvn -pl ${SERVICE_NAME} -am clean package -DskipTests
+
+# --- Stage 2: Runner ---
+# This stage creates the final, lean production image using only the JRE.
+FROM eclipse-temurin:17-jre-jammy
+
+ARG SERVICE_NAME
+
+WORKDIR /app
+
+# Copy only the built JAR from the builder stage to the final image
+COPY --from=builder /build/${SERVICE_NAME}/target/*.jar app.jar
+
+# Command to run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
