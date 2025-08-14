@@ -65,14 +65,20 @@ Este projeto implementa uma arquitetura de microserviços completa, simulando o 
 
 ### 📚 Serviço de Bestiário (Bestiary Service)
 - **Catálogo de Itens**: Gerenciamento de espadas, poções e equipamentos
-- **CRUD Completo**: Criação, leitura, atualização e exclusão de itens
+- **Catálogo de Monstros**: Registro completo de criaturas do universo The Witcher
+- **CRUD Completo**: Criação, leitura, atualização e exclusão para itens e monstros
 - **Tipos de Itens**: Classificação entre WEAPON, POTION, ARMOR, etc.
-- **Validação de Negócio**: Regras específicas para cada tipo de item
+- **Tipos de Monstros**: 11 categorias incluindo NECROPHAGE, SPECTER, VAMPIRE, etc.
+- **Validação de Negócio**: Regras específicas para cada tipo de entidade
+- **DTOs Otimizados**: Diferentes DTOs para criação, atualização e consulta
 
 ### 📜 Serviço de Contratos (Contracts Service)
-- **Criação de Contratos**: Registro de novos trabalhos para bruxos
+- **CRUD Completo**: Criação, leitura, atualização e exclusão de contratos
+- **Gestão de Status**: Controle do ciclo de vida dos contratos (PENDING, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED, FAILED)
 - **Validação de Itens**: Verificação automática se os itens necessários existem no bestiário
-- **Integração com Kafka**: Notificações assíncronas sobre novos contratos
+- **Persistência**: Contratos salvos no PostgreSQL com timestamps automáticos
+- **Filtros Avançados**: Busca por status e ID do monstro
+- **Integração com Kafka**: Notificações assíncronas sobre eventos de contratos
 - **Comunicação Segura**: Integração autenticada com o Bestiary Service
 
 ## 🐳 Como Executar o Projeto
@@ -112,6 +118,20 @@ docker-compose logs -f bestiary-and-armory-app
 ### 4. Aguarde a Inicialização
 Os serviços podem levar alguns minutos para inicializar completamente. Monitore os logs para confirmar que todos estão funcionando.
 
+### 5. Carregue os Dados de Exemplo (Opcional)
+```bash
+# Navegue para o diretório de dados
+cd data
+
+# Execute o script para carregar dados de exemplo
+load-data.bat
+```
+
+Este script carrega:
+- **15 itens** (espadas, poções, armaduras)
+- **10 monstros** (grifos, vampiros, necrófagos, etc.)
+- **5 contratos** com diferentes status e itens requeridos
+
 ## 🌐 Endpoints e Documentação
 
 ### Swagger UI (Interface Unificada)
@@ -126,6 +146,26 @@ Os serviços podem levar alguns minutos para inicializar completamente. Monitore
 | Bestiary Service | http://localhost:8100/api | http://localhost:8100/swagger-ui.html |
 | Contracts Service | http://localhost:8200/api | http://localhost:8200/swagger-ui.html |
 | Eureka Dashboard | http://localhost:8761 | - |
+
+### Endpoints Principais
+
+#### Bestiary Service
+- `GET /api/items` - Listar todos os itens
+- `POST /api/items` - Criar novo item
+- `PUT /api/items/{id}` - Atualizar item
+- `DELETE /api/items/{id}` - Remover item
+- `GET /api/monsters` - Listar todos os monstros
+- `POST /api/monsters` - Criar novo monstro
+- `PUT /api/monsters/{id}` - Atualizar monstro
+- `DELETE /api/monsters/{id}` - Remover monstro
+
+#### Contracts Service
+- `GET /api/contracts` - Listar todos os contratos
+- `POST /api/contracts` - Criar novo contrato
+- `GET /api/contracts/{id}` - Buscar contrato por ID
+- `PUT /api/contracts/{id}/status` - Atualizar status do contrato
+- `DELETE /api/contracts/{id}` - Remover contrato
+- `GET /api/contracts/status/{status}` - Filtrar por status
 
 ## 🔑 Como Usar a Autenticação
 
@@ -168,8 +208,26 @@ Todos os serviços expõem endpoints de saúde:
 - http://localhost:8766/actuator/health (Auth)
 - http://localhost:8765/actuator/health (Gateway)
 
+### Endpoints de Validação de Token
+Para testar se o token JWT está válido:
+- http://localhost:8100/api/auth/validate (Bestiary)
+- http://localhost:8200/api/auth/validate (Contracts)
+
 ### Eureka Dashboard
 Monitore o registro de serviços em: http://localhost:8761
+
+### Banco de Dados
+Para acessar o PostgreSQL diretamente:
+```bash
+# Conectar ao banco
+docker exec -it witcher-postgres psql -U witcher_user -d witcher_db
+
+# Consultas úteis
+SELECT COUNT(*) FROM items;
+SELECT COUNT(*) FROM monsters;
+SELECT COUNT(*) FROM contracts;
+SELECT c.id, c.monster_id, c.status, c.created_at FROM contracts c;
+```
 
 ## 🔧 Desenvolvimento Local
 
@@ -178,7 +236,22 @@ Monitore o registro de serviços em: http://localhost:8761
 witcher-microservices/
 ├── api-gateway/                 # Gateway de entrada
 ├── auth-service/               # Serviço de autenticação
-├── bestiary-and-armory-service/ # Serviço de itens
+├── bestiary-and-armory-service/ # Serviço de itens e monstros
+│   ├── item/                   # Módulo de itens
+│   │   ├── dto/               # DTOs para itens
+│   │   ├── mapper/            # Mapeadores de itens
+│   │   ├── model/             # Entidades de itens
+│   │   ├── repository/        # Repositórios de itens
+│   │   └── service/           # Serviços de itens
+│   ├── monster/               # Módulo de monstros
+│   │   ├── dto/               # DTOs para monstros
+│   │   ├── mapper/            # Mapeadores de monstros
+│   │   ├── model/             # Entidades de monstros
+│   │   ├── repository/        # Repositórios de monstros
+│   │   └── service/           # Serviços de monstros
+│   ├── controller/            # Controllers REST
+│   ├── config/                # Configurações
+│   └── security/              # Configurações de segurança
 ├── witcher-contracts-service/   # Serviço de contratos
 ├── service-discovery/          # Eureka Server
 ├── common-library/             # Biblioteca compartilhada
@@ -227,10 +300,91 @@ mvn clean package -DskipTests -pl bestiary-and-armory-service -am
 1. **Registrar como Bruxo**
 2. **Fazer Login e obter token**
 3. **Adicionar uma espada ao bestiário**
-4. **Criar um contrato que requer essa espada**
-5. **Verificar se o contrato foi aceito**
+4. **Catalogar um monstro (ex: Grifo)**
+5. **Criar um contrato que requer essa espada**
+6. **Verificar se o contrato foi aceito**
 
-Este fluxo simula um bruxo se registrando no sistema, adicionando equipamentos ao seu arsenal e aceitando um novo contrato.
+Este fluxo simula um bruxo se registrando no sistema, catalogando monstros, adicionando equipamentos ao seu arsenal e aceitando um novo contrato.
+
+### Exemplos de Endpoints
+
+#### Gerenciamento de Itens
+```bash
+# Criar um item
+curl -X POST http://localhost:8100/api/items \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Espada de Prata",
+    "description": "Espada forjada especialmente para matar monstros",
+    "itemType": "WEAPON",
+    "price": 150.00
+  }'
+
+# Atualizar um item
+curl -X PUT http://localhost:8100/api/items/1 \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Espada de Prata Aprimorada",
+    "description": "Espada forjada e aprimorada para matar monstros",
+    "itemType": "WEAPON",
+    "price": 200.00
+  }'
+```
+
+#### Gerenciamento de Monstros
+```bash
+# Criar um monstro
+curl -X POST http://localhost:8100/api/monsters \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Grifo",
+    "description": "Criatura híbrida com corpo de leão e cabeça de águia",
+    "monsterType": "HYBRID",
+    "weakness": "Bomba Aard, Óleo Anti-Híbrido",
+    "habitat": "Montanhas e penhascos",
+    "dangerLevel": 7
+  }'
+
+# Atualizar um monstro
+curl -X PUT http://localhost:8100/api/monsters/1 \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Grifo Real",
+    "description": "Versão mais poderosa do grifo comum",
+    "monsterType": "HYBRID",
+    "weakness": "Bomba Aard, Óleo Anti-Híbrido",
+    "habitat": "Montanhas e penhascos",
+    "dangerLevel": 9
+  }'
+```
+
+#### Gerenciamento de Contratos
+```bash
+# Criar um contrato
+curl -X POST http://localhost:8200/api/contracts \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "monsterId": 1,
+    "requiredItemIds": [1, 2, 3]
+  }'
+
+# Atualizar status do contrato
+curl -X PUT http://localhost:8200/api/contracts/1/status \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "ACCEPTED"
+  }'
+
+# Listar contratos por status
+curl -X GET http://localhost:8200/api/contracts/status/PENDING \
+  -H "Authorization: Bearer <token>"
+```
 
 ## 🤝 Contribuindo
 
@@ -267,11 +421,13 @@ Sua opinião é extremamente valiosa! Se você:
 
 Este projeto está em constante evolução. Algumas funcionalidades planejadas:
 
-- 🔍 Sistema de busca avançada no bestiário
+- 🔍 Sistema de busca avançada no bestiário (itens e monstros)
 - 📈 Dashboard de métricas e analytics
 - 🌍 Suporte a múltiplas regiões (multi-tenant)
 - 🔔 Sistema de notificações em tempo real
 - 📱 API mobile-friendly
+- 🎨 Upload de imagens para itens e monstros
+- 📊 Relatórios de contratos por tipo de monstro
 
 **Lembre-se**: *"O destino é tudo, Geralt."* - Mas com código bem escrito e arquitetura sólida, podemos moldar nosso próprio destino tecnológico! 
 
